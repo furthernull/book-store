@@ -5,6 +5,7 @@ import com.example.bookstore.dto.BookRequestDto;
 import com.example.bookstore.dto.BookSearchParametersDto;
 import com.example.bookstore.service.BookService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable Long id) {
+    public BookDto getBookById(@PathVariable @Positive Long id) {
         return bookService.findById(id);
     }
 
@@ -45,7 +46,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookDto updateBookById(@PathVariable Long id,
+    public BookDto updateBookById(@PathVariable @Positive Long id,
                                   @RequestBody @Valid BookRequestDto requestDto) {
         return bookService.updateBookById(id, requestDto);
     }
