@@ -10,7 +10,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @Validated
-@RequestMapping(value = "/books")
+@RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
 
@@ -41,7 +43,7 @@ public class BookController {
 
     @Operation(summary = "Get all", description = "Get list of existing books")
     @GetMapping
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookDto> getAll(@ParameterObject @PageableDefault Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
@@ -55,8 +57,9 @@ public class BookController {
     @Operation(summary = "Search books",
             description = "Search books by parameters like: titles, authors")
     @GetMapping("/search")
-    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    public List<BookDto> searchBooks(@ParameterObject @PageableDefault Pageable pageable,
+                                     BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters, pageable);
     }
 
     @Operation(summary = "Update book by id",
@@ -70,7 +73,7 @@ public class BookController {
     @Operation(summary = "Delete", description = "Delete book by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable @Positive Long id) {
         bookService.delete(id);
     }
 }

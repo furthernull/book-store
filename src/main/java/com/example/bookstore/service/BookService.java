@@ -13,7 +13,7 @@ public interface BookService {
 
     BookDto findById(Long id);
 
-    List<BookDto> search(BookSearchParametersDto searchParameters);
+    List<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable);
 
     BookDto updateBookById(Long id, BookRequestDto requestDto);
 
