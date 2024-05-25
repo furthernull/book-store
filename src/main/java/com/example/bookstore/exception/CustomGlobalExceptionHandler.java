@@ -33,6 +33,15 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RegistrationException.class)
+    protected ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT);
+        body.put("error", "not valid to create user. " + ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -58,5 +67,4 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         }
         return e.getDefaultMessage();
     }
-
 }
