@@ -16,6 +16,7 @@ public class UserRegistrationRequestDto {
     @Length(min = 8, max = 25)
     private String password;
     @NotBlank
+    @Length(min = 8, max = 25)
     private String repeatPassword;
     @NotBlank
     private String firstName;
