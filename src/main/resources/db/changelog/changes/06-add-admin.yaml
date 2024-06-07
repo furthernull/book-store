@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-admin
+      author: admin
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "admin@bookstore.com"
+              - column:
+                  name: password
+                  value: "$2a$10$50mtJjNLXIidJyIMCtqk0e5sQl6g7pNr1JYnxKPiCM7FPe.iHlUCe"
+              - column:
+                  name: first_name
+                  value: "admin"
+              - column:
+                  name: last_name
+                  value: "admin"
+              - column:
+                  name: shipping_address
+                  value: "local"
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM users WHERE email = 'admin@bookstore.com')"
+              - column:
+                  name: role_id
+                  valueComputed: "(SELECT id FROM roles WHERE role = 'ADMIN')"
