@@ -42,15 +42,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(RoleNotFoundException.class)
-    protected ResponseEntity<Object> handleRoleNotFoundException(RoleNotFoundException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_IMPLEMENTED);
-        body.put("error", "registration cannot be extended " + ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_IMPLEMENTED);
-    }
-
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         Map<String, Object> body = new LinkedHashMap<>();

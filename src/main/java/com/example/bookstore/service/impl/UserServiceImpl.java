@@ -2,8 +2,8 @@ package com.example.bookstore.service.impl;
 
 import com.example.bookstore.dto.user.UserRegistrationRequestDto;
 import com.example.bookstore.dto.user.UserResponseDto;
+import com.example.bookstore.exception.EntityNotFoundException;
 import com.example.bookstore.exception.RegistrationException;
-import com.example.bookstore.exception.RoleNotFoundException;
 import com.example.bookstore.mapper.UserMapper;
 import com.example.bookstore.model.Role;
 import com.example.bookstore.model.User;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
-    private static final Role.RoleName DEFAULT_ROLE = Role.RoleName.USER;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -33,9 +32,10 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.setRoles(Set.of(roleRepository.findByRole(DEFAULT_ROLE).orElseThrow(
-                () -> new RoleNotFoundException(String.format("Can't find %s role",
-                        DEFAULT_ROLE)))));
+        Role role = roleRepository.findByRole(Role.RoleName.USER).orElseThrow(
+                () -> new EntityNotFoundException("Can't find role USER")
+        );
+        user.setRoles(Set.of(role));
         userRepository.save(user);
         return userMapper.toDto(user);
     }
