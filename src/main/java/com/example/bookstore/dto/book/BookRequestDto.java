@@ -1,10 +1,12 @@
 package com.example.bookstore.dto.book;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Set;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
@@ -25,4 +27,6 @@ public class BookRequestDto {
     @NotBlank(message = "should be not blank")
     @URL(message = "invalid. Please provide a valid URL")
     private String coverImage;
+    @NotEmpty(message = "should not be empty")
+    private Set<Long> categoryIds;
 }

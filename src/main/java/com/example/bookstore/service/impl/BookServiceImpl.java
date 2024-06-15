@@ -1,6 +1,7 @@
 package com.example.bookstore.service.impl;
 
 import com.example.bookstore.dto.book.BookDto;
+import com.example.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.bookstore.dto.book.BookRequestDto;
 import com.example.bookstore.dto.book.BookSearchParametersDto;
 import com.example.bookstore.exception.EntityNotFoundException;
@@ -30,7 +31,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> findAll(Pageable pageable) {
-        return bookMapper.map(bookRepository.findAll(pageable));
+        return bookMapper.toDto(bookRepository.findAll(pageable));
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long id, Pageable pageable) {
+        return bookMapper.toDtoWithoutCategories(bookRepository.findAllByCategoryId(id, pageable));
     }
 
     @Override
@@ -44,7 +50,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
-        return bookMapper.map(bookRepository.findAll(bookSpecification, pageable));
+        return bookMapper.toDto(bookRepository.findAll(bookSpecification, pageable));
     }
 
     @Override
