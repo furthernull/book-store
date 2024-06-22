@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: shopping_carts
             columns:
               - column:
-                  name: user_id
+                  name: id
                   type: bigint
                   constraints:
                     primaryKey: true

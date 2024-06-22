@@ -47,14 +47,6 @@ public interface BookMapper {
         book.setCategories(categories);
     }
 
-    @Mapping(target = "title", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "author", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "isbn", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "price", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "description", nullValuePropertyMappingStrategy
             = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "coverImage", nullValuePropertyMappingStrategy

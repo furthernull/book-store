@@ -3,6 +3,7 @@ package com.example.bookstore.mapper;
 import com.example.bookstore.config.MapperConfig;
 import com.example.bookstore.dto.cartitem.CartItemDto;
 import com.example.bookstore.dto.cartitem.CartItemRequestDto;
+import com.example.bookstore.dto.cartitem.CartItemUpdateQuantityDto;
 import com.example.bookstore.model.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,5 +21,5 @@ public interface CartItemMapper {
     @Mapping(target = "book", source = "bookId", qualifiedByName = "bookById")
     CartItem toModel(CartItemRequestDto cartItemRequestDtoDto);
 
-    void update(@MappingTarget CartItem cartItem, CartItemRequestDto cartItemDto);
+    void update(@MappingTarget CartItem cartItem, CartItemUpdateQuantityDto cartItemDto);
 }
