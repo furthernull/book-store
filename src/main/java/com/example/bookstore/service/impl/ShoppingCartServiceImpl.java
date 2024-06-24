@@ -15,7 +15,6 @@ import com.example.bookstore.repository.cartitem.CartItemRepository;
 import com.example.bookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.example.bookstore.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -35,8 +34,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto getShoppingCart(Authentication authentication) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
+    public ShoppingCartDto getShoppingCart(Long userId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException(
                         "Can't retrieve ShoppingCart by user id: " + userId)
@@ -45,9 +43,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto addToShoppingCart(Authentication authentication,
+    public ShoppingCartDto addToShoppingCart(Long userId,
                                              CartItemRequestDto requestDto) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
         ShoppingCart shoppingCart = shoppingCartRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find shopping cart by id: " + userId));
         Book book = bookRepository.findById(requestDto.bookId()).orElseThrow(
@@ -71,10 +68,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto updateShoppingCart(Authentication authentication,
+    public ShoppingCartDto updateShoppingCart(Long userId,
                                               Long cartItemId,
                                               CartItemUpdateQuantityDto requestDto) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
         ShoppingCart shoppingCart = shoppingCartRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find shopping cart by id: " + userId));
         CartItem cartItem = shoppingCart.getCartItems().stream()
@@ -88,8 +84,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteItem(Long cartItemId, Authentication authentication) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
+    public void deleteItem(Long cartItemId, Long userId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find shopping cart by id:" + userId)
         );
