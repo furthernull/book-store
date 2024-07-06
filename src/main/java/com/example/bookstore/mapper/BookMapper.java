@@ -7,12 +7,14 @@ import com.example.bookstore.dto.book.BookRequestDto;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Category;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MapperConfig.class)
@@ -45,18 +47,17 @@ public interface BookMapper {
         book.setCategories(categories);
     }
 
-    @Mapping(target = "title", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "author", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "isbn", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "price", nullValuePropertyMappingStrategy
-            = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "description", nullValuePropertyMappingStrategy
             = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "coverImage", nullValuePropertyMappingStrategy
             = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "categories", ignore = true)
     void updateModel(@MappingTarget Book book, BookRequestDto requestDto);
+
+    @Named("bookById")
+    default Book bookById(Long id) {
+        return Optional.ofNullable(id)
+                .map(Book::new)
+                .orElse(null);
+    }
 }
