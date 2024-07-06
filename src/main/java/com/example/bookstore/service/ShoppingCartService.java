@@ -18,4 +18,6 @@ public interface ShoppingCartService {
                                        CartItemUpdateQuantityDto requestDto);
 
     void deleteItem(Long cartItemId, Long userId);
+
+    void clearShoppingCart(Long userId);
 }

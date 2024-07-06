@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Shopping cart management", description = "endpoints for managing cart items")
+@Tag(name = "Shopping cart management", description = "Endpoints for managing cart items")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cart")
@@ -54,6 +54,7 @@ public class ShoppingCartController {
         return shoppingCartService.updateShoppingCart(user.getId(), cartItemId, requestDto);
     }
 
+    @Operation(summary = "Delete item", description = "delete an item from shopping cart")
     @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/items/{cartItemId}")
     public void delete(@PathVariable @Positive Long cartItemId,
