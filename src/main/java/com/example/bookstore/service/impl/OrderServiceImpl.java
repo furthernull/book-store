@@ -39,9 +39,8 @@ public class OrderServiceImpl implements OrderService {
                         String.format("Can't find shopping cart for user: %s", user.getEmail())
                 ));
         Order order = orderMapper.initOrder(shoppingCart, requestDto);
-        orderRepository.save(order);
         shoppingCartService.clearShoppingCart(user.getId());
-        return orderMapper.toDto(order);
+        return orderMapper.toDto(orderRepository.save(order));
     }
 
     @Override

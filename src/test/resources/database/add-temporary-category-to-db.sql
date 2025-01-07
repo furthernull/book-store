@@ -1,0 +1,1 @@
+INSERT INTO categories (id, name, description, is_deleted) VALUES (4, 'new category', 'new category description', false);

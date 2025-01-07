@@ -5,17 +5,19 @@ import com.example.bookstore.dto.order.OrderDto;
 import com.example.bookstore.dto.order.OrderRequestDto;
 import com.example.bookstore.dto.order.OrderUpdateRequestDto;
 import com.example.bookstore.model.Order;
+import com.example.bookstore.model.OrderItem;
 import com.example.bookstore.model.ShoppingCart;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.mapstruct.AfterMapping;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-@Mapper(config = MapperConfig.class, uses = OrderItemMapper.class)
+@Mapper(config = MapperConfig.class)
 public interface OrderMapper {
     @Mapping(target = "status", source = "status", qualifiedByName = "stringToStatus")
     void update(@MappingTarget Order order, OrderUpdateRequestDto requestDto);
@@ -32,8 +34,21 @@ public interface OrderMapper {
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "total", source = "shoppingCart", qualifiedByName = "totalPrice")
     @Mapping(target = "shippingAddress", source = "requestDto.shippingAddress")
-    @Mapping(target = "orderItems", source = "shoppingCart.cartItems")
+    @Mapping(target = "orderItems", expression = "java(initOrderItems(shoppingCart, order))")
     Order initOrder(ShoppingCart shoppingCart, OrderRequestDto requestDto);
+
+    default Set<OrderItem> initOrderItems(ShoppingCart shoppingCart, Order order) {
+        return shoppingCart.getCartItems().stream()
+                .map(cartItem -> {
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setOrder(order);
+                    orderItem.setBook(cartItem.getBook());
+                    orderItem.setQuantity(cartItem.getQuantity());
+                    orderItem.setPrice(cartItem.getBook().getPrice());
+                    return orderItem;
+                })
+                .collect(Collectors.toSet());
+    }
 
     default LocalDateTime getCurrentDate() {
         return LocalDateTime.now();
@@ -41,13 +56,6 @@ public interface OrderMapper {
 
     default Order.Status getDefaultStatus() {
         return Order.Status.PROCESSING;
-    }
-
-    @AfterMapping
-    default void setOrderToItem(Order order) {
-        order.getOrderItems()
-                .stream()
-                .forEach(i -> i.setOrder(order));
     }
 
     @Named("totalPrice")
