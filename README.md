@@ -1,5 +1,5 @@
 ![banner](src/main/resources/screenshots/banner.jpg)
-# Bookstore
+# NookBook
 ***
 This RESTful API organizes management for an online bookstore.
 Afford customers to search for desired books,
